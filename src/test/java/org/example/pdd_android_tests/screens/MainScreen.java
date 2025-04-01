@@ -30,7 +30,7 @@ public class MainScreen {
     @AndroidFindBy(id = "ru.drom.pdd.android.app:id/dashboard_settings")
     protected WebElement settingsButton;
 
-    @AndroidFindBy(id = "ru.drom.pdd.android.app:id/cd_category")
+    @AndroidFindBy(id = "ru.drom.pdd.android.app:id/ab_category")
     protected WebElement abButton;
 
     @AndroidFindBy(xpath = "//android.widget.ImageButton[@content-desc='Перейти вверх']")
