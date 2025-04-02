@@ -39,7 +39,17 @@ public class MainScreen {
     @AndroidFindBy(id = "ru.drom.pdd.android.app:id/learn_papers")
     protected WebElement categoryButton;
 
-    public String getTextCategoryButton() {
+    @AndroidFindBy(id = "ru.drom.pdd.android.app:id/info_button")
+    protected WebElement infoButton;
+
+    @AndroidFindBy(id = "ru.drom.pdd.android.app:id/info_text")
+    protected WebElement infoText;
+
+    @AndroidFindBy(id = "ru.drom.pdd.android.app:id/exam_button")
+    protected WebElement examButton;
+
+
+    public void intoMainScreen() {
         myWait(5).clickable(categoryRadioButton.get(1));
         categoryRadioButton.get(1).click();
         LOG.info("Выбрали радио кнопку: 'Категория B'");
@@ -49,6 +59,10 @@ public class MainScreen {
         myWait(5).clickable(allowButton);
         allowButton.click();
         LOG.info("Нажали 'Разрешить'");
+    }
+
+
+    public String getTextCategoryButton() {
         myWait(5).clickable(settingsButton);
         settingsButton.click();
         LOG.info("Нажали на значок 'шестеренки'");
@@ -60,6 +74,16 @@ public class MainScreen {
         LOG.info("Нажали на кнопку 'Назад'");
         myWait(5).visible(categoryButton);
         return categoryButton.getText();
+    }
+
+    public String getInfoTextBC() {
+        myWait(5).clickable(examButton);
+        examButton.click();
+        LOG.info("Нажали на кнопку 'Экзамен'");
+        myWait(5).clickable(infoButton);
+        infoButton.click();
+        LOG.info("Нажали на кнопку 'МНЕ НУЖНА КАТЕГОРИЯ BC'");
+        return infoText.getText();
     }
 
     public MainScreen(WebDriver driver) {
