@@ -56,4 +56,11 @@ public class MainScreenTest extends BaseTest {
         assertTrue(mainScreen.isconfirmAnswerButton(), "Подтверждения ответа не было!");
     }
 
+    @Test
+    @DisplayName("Проверка, что при выключенном в настройках подтверждении ответа " +
+            "- после ответа на вопрос открывается экран следующего вопроса")
+    public void nextQuestionCheck() {
+        assertTrue(mainScreen.isNextQuestion(), "Требуется подтверждение ответа!");
+    }
+
 }

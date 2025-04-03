@@ -36,11 +36,11 @@ public class MainScreen {
 
     @SuppressWarnings("unused")
     @AndroidFindBy(id = "ru.drom.pdd.android.app:id/ab_category")
-    private WebElement abButton;
+    private WebElement abCategoryButton;
 
     @SuppressWarnings("unused")
     @AndroidFindBy(id = "ru.drom.pdd.android.app:id/cd_category")
-    private WebElement cdButton;
+    private WebElement cdCategoryButton;
 
     @SuppressWarnings("unused")
     @AndroidFindBy(xpath = "//android.widget.ImageButton[@content-desc='Перейти вверх']")
@@ -78,6 +78,15 @@ public class MainScreen {
     @AndroidFindBy(uiAutomator = "new UiSelector()" + ".resourceId(\"ru.drom.pdd.android.app:id/go_to_next_button\")" + ".text(\"ПОДТВЕРДИТЬ ОТВЕТ\")")
     private WebElement confirmAnswerButton;
 
+    @SuppressWarnings("unused")
+    @AndroidFindBy(uiAutomator = "new UiSelector()" + ".resourceId(\"ru.drom.pdd.android.app:id/question_button\")" + ".focusable(true)" + ".fromParent(new UiSelector()" +  // Ищем среди соседей
+            ".resourceId(\"ru.drom.pdd.android.app:id/question_number\")" + ".text(\"2\"))")
+    private WebElement nextQuestionButton;
+
+    @SuppressWarnings("unused")
+    @AndroidFindBy(id = "ru.drom.pdd.android.app:id/ab_button")
+    private WebElement abButton;
+
 
     public void intoMainScreen() {
         myWait(5).clickable(categoryRadioButton.get(1));
@@ -98,7 +107,7 @@ public class MainScreen {
         LOG.info("Нажали на значок 'шестеренки'");
         myWait(5).clickable(catButton);
         catButton.click();
-        LOG.info("Выбрали радио кнопку "+ catButton.getText());
+        LOG.info("Выбрали радио кнопку " + catButton.getText());
         myWait(10).clickable(backButton);
         backButton.click();
         LOG.info("Нажали на кнопку 'Назад'");
@@ -107,11 +116,11 @@ public class MainScreen {
     }
 
     public String getTextABCategoryButton() {
-        return getTextCategoryButton(abButton);
+        return getTextCategoryButton(abCategoryButton);
     }
 
     public String getTextCDCategoryButton() {
-        return getTextCategoryButton(cdButton);
+        return getTextCategoryButton(cdCategoryButton);
     }
 
 
@@ -129,8 +138,8 @@ public class MainScreen {
         myWait(5).clickable(settingsButton);
         settingsButton.click();
         LOG.info("Нажали на значок 'шестеренки'");
-        myWait(5).clickable(abButton);
-        abButton.click();
+        myWait(5).clickable(abCategoryButton);
+        abCategoryButton.click();
         LOG.info("Выбрали радио кнопку 'AB'");
         myWait(5).clickable(confirmToggleButton);
         confirmToggleButton.click();
@@ -149,6 +158,27 @@ public class MainScreen {
         LOG.info("Выбрали первый вариант ответа");
         try {
             myWait(5).clickable(confirmAnswerButton);
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public boolean isNextQuestion() {
+        myWait(5).clickable(examButton);
+        examButton.click();
+        LOG.info("Нажали на кнопку 'Экзамен'");
+        myWait(5).clickable(abButton);
+        abButton.click();
+        LOG.info("Нажали на кнопку 'AB'");
+        myWait(5).clickable(startExamButton);
+        startExamButton.click();
+        LOG.info("Нажали на кнопку 'Начать экзамен'");
+        myWait(5).clickable(answer1Button);
+        answer1Button.click();
+        LOG.info("Выбрали первый вариант ответа");
+        try {
+            myWait(5).visible(nextQuestionButton);
             return true;
         } catch (TimeoutException e) {
             return false;
