@@ -3,6 +3,7 @@ package org.example.pdd_android_tests.screens;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.example.pdd_android_tests.AllureLogger;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -17,36 +18,61 @@ public class MainScreen {
 
     private final AllureLogger LOG = new AllureLogger(LoggerFactory.getLogger(MainScreen.class));
 
-
+    @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection", "unused"})
     @AndroidFindBy(id = "ru.drom.pdd.android.app:id/toggleButton")
-    protected List<WebElement> categoryRadioButton;
+    private List<WebElement> categoryRadioButton;
 
+    @SuppressWarnings("unused")
     @AndroidFindBy(id = "ru.drom.pdd.android.app:id/skip_button")
-    protected WebElement skipButton;
+    private WebElement skipButton;
 
+    @SuppressWarnings("unused")
     @AndroidFindBy(id = "com.android.permissioncontroller:id/permission_allow_button")
-    protected WebElement allowButton;
+    private WebElement allowButton;
 
+    @SuppressWarnings("unused")
     @AndroidFindBy(id = "ru.drom.pdd.android.app:id/dashboard_settings")
-    protected WebElement settingsButton;
+    private WebElement settingsButton;
 
+    @SuppressWarnings("unused")
     @AndroidFindBy(id = "ru.drom.pdd.android.app:id/ab_category")
-    protected WebElement abButton;
+    private WebElement abButton;
 
+    @SuppressWarnings("unused")
     @AndroidFindBy(xpath = "//android.widget.ImageButton[@content-desc='Перейти вверх']")
-    protected WebElement backButton;
+    private WebElement backButton;
 
+    @SuppressWarnings("unused")
     @AndroidFindBy(id = "ru.drom.pdd.android.app:id/learn_papers")
-    protected WebElement categoryButton;
+    private WebElement categoryButton;
 
+    @SuppressWarnings("unused")
     @AndroidFindBy(id = "ru.drom.pdd.android.app:id/info_button")
-    protected WebElement infoButton;
+    private WebElement infoButton;
 
+    @SuppressWarnings("unused")
     @AndroidFindBy(id = "ru.drom.pdd.android.app:id/info_text")
-    protected WebElement infoText;
+    private WebElement infoText;
 
+    @SuppressWarnings("unused")
     @AndroidFindBy(id = "ru.drom.pdd.android.app:id/exam_button")
-    protected WebElement examButton;
+    private WebElement examButton;
+
+    @SuppressWarnings("unused")
+    @AndroidFindBy(id = "ru.drom.pdd.android.app:id/confirm_answers_switch")
+    private WebElement confirmToggleButton;
+
+    @SuppressWarnings("unused")
+    @AndroidFindBy(id = "ru.drom.pdd.android.app:id/start_exam_button")
+    private WebElement startExamButton;
+
+    @SuppressWarnings("unused")
+    @AndroidFindBy(xpath = "//android.widget.TextView[@resource-id=\"ru.drom.pdd.android.app:id/answer_number_text\" and @text=\"1.\"]")
+    private WebElement answer1Button;
+
+    @SuppressWarnings("unused")
+    @AndroidFindBy(uiAutomator = "new UiSelector()" + ".resourceId(\"ru.drom.pdd.android.app:id/go_to_next_button\")" + ".text(\"ПОДТВЕРДИТЬ ОТВЕТ\")")
+    private WebElement confirmAnswerButton;
 
 
     public void intoMainScreen() {
@@ -84,6 +110,36 @@ public class MainScreen {
         infoButton.click();
         LOG.info("Нажали на кнопку 'МНЕ НУЖНА КАТЕГОРИЯ BC'");
         return infoText.getText();
+    }
+
+    public boolean isconfirmAnswerButton() {
+        myWait(5).clickable(settingsButton);
+        settingsButton.click();
+        LOG.info("Нажали на значок 'шестеренки'");
+        myWait(5).clickable(abButton);
+        abButton.click();
+        LOG.info("Выбрали радио кнопку 'AB'");
+        myWait(5).clickable(confirmToggleButton);
+        confirmToggleButton.click();
+        LOG.info("Выбрали радио кнопку 'Дополнительно подтверждать выбранный ответ'");
+        myWait(10).clickable(backButton);
+        backButton.click();
+        LOG.info("Нажали на кнопку 'Назад'");
+        myWait(5).clickable(examButton);
+        examButton.click();
+        LOG.info("Нажали на кнопку 'Экзамен'");
+        myWait(5).clickable(startExamButton);
+        startExamButton.click();
+        LOG.info("Нажали на кнопку 'Начать экзамен'");
+        myWait(5).clickable(answer1Button);
+        answer1Button.click();
+        LOG.info("Выбрали первый вариант ответа");
+        try {
+            myWait(5).clickable(confirmAnswerButton);
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 
     public MainScreen(WebDriver driver) {

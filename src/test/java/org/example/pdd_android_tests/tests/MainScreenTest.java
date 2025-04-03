@@ -29,7 +29,8 @@ public class MainScreenTest extends BaseTest {
     @DisplayName("Проверка, что после выбора в настройках категорий AB " +
             "- текст кнопки 'Билеты' на главном экране меняется на 'Билеты AB'")
     public void abCategoryCheck() {
-        assertEquals("Билеты AB", mainScreen.getTextCategoryButton(), "Текст кнопки неверный");
+        assertEquals("Билеты AB", mainScreen.getTextCategoryButton(),
+                "Текст кнопки неверный!");
     }
 
     @Test
@@ -37,7 +38,14 @@ public class MainScreenTest extends BaseTest {
             "- выводится сообщение, что их не существует")
     public void infoTextBCCheck() {
         assertTrue(mainScreen.getInfoTextBC().contains("Билетов BC не существует"),
-                "Текст должен содержать информацию об отсутствии билетов BC");
+                "Сообщение не появилось!");
+    }
+
+    @Test
+    @DisplayName("Проверка, что при включенном в настройках подтверждении ответа на вопрос " +
+            "- после ответа появляется кнопка 'ПОДТВЕРДИТЬ ОТВЕТ'")
+    public void confirmAnswerButtonCheck() {
+        assertTrue(mainScreen.isconfirmAnswerButton(), "Подтверждения ответа не было!");
     }
 
 }
