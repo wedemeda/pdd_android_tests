@@ -29,7 +29,15 @@ public class MainScreenTest extends BaseTest {
     @DisplayName("Проверка, что после выбора в настройках категорий AB " +
             "- текст кнопки 'Билеты' на главном экране меняется на 'Билеты AB'")
     public void abCategoryCheck() {
-        assertEquals("Билеты AB", mainScreen.getTextCategoryButton(),
+        assertEquals("Билеты AB", mainScreen.getTextABCategoryButton(),
+                "Текст кнопки неверный!");
+    }
+
+    @Test
+    @DisplayName("Проверка, что после выбора в настройках категорий CD " +
+            "- текст кнопки 'Билеты' на главном экране меняется на 'Билеты CD'")
+    public void cdCategoryCheck() {
+        assertEquals("Билеты CD", mainScreen.getTextCDCategoryButton(),
                 "Текст кнопки неверный!");
     }
 

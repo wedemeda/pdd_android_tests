@@ -39,6 +39,10 @@ public class MainScreen {
     private WebElement abButton;
 
     @SuppressWarnings("unused")
+    @AndroidFindBy(id = "ru.drom.pdd.android.app:id/cd_category")
+    private WebElement cdButton;
+
+    @SuppressWarnings("unused")
     @AndroidFindBy(xpath = "//android.widget.ImageButton[@content-desc='Перейти вверх']")
     private WebElement backButton;
 
@@ -88,19 +92,28 @@ public class MainScreen {
     }
 
 
-    public String getTextCategoryButton() {
+    public String getTextCategoryButton(WebElement catButton) {
         myWait(5).clickable(settingsButton);
         settingsButton.click();
         LOG.info("Нажали на значок 'шестеренки'");
-        myWait(5).clickable(abButton);
-        abButton.click();
-        LOG.info("Выбрали радио кнопку 'AB'");
+        myWait(5).clickable(catButton);
+        catButton.click();
+        LOG.info("Выбрали радио кнопку "+ catButton.getText());
         myWait(10).clickable(backButton);
         backButton.click();
         LOG.info("Нажали на кнопку 'Назад'");
         myWait(5).visible(categoryButton);
         return categoryButton.getText();
     }
+
+    public String getTextABCategoryButton() {
+        return getTextCategoryButton(abButton);
+    }
+
+    public String getTextCDCategoryButton() {
+        return getTextCategoryButton(cdButton);
+    }
+
 
     public String getInfoTextBC() {
         myWait(5).clickable(examButton);
