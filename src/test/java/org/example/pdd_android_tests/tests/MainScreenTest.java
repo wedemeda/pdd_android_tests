@@ -63,4 +63,11 @@ public class MainScreenTest extends BaseTest {
         assertTrue(mainScreen.isNextQuestion(), "Требуется подтверждение ответа!");
     }
 
+    @Test
+    @DisplayName("Проверка, что при включенной функции 'перемешивать варианты ответов' " +
+            "варианты идут не в дефолтном порядке.")
+    public void mischungAnswerCheck() {
+        assertTrue(mainScreen.isMischungAnswers(), "Варианты ответов не перемешаны!");
+    }
+
 }
