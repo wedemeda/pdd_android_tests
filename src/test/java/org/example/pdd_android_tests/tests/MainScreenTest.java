@@ -66,8 +66,16 @@ public class MainScreenTest extends BaseTest {
     @Test
     @DisplayName("Проверка, что при включенной функции 'перемешивать варианты ответов' " +
             "варианты идут не в дефолтном порядке.")
-    public void mischungAnswerCheck() {
-        assertTrue(mainScreen.isMischungAnswers(), "Варианты ответов не перемешаны!");
+    public void shuffleAnswerCheck() {
+        assertTrue(mainScreen.isShuffleAnswers(), "Варианты ответов не перемешаны!");
+    }
+
+    @Test
+    @DisplayName("Проверка, что при отключенных подсказках ошибок, " +
+            "при неверном ответе сразу открывается экран следующего вопроса")
+    public void nextQuestionWithoutHintCheck() {
+        assertTrue(mainScreen.isNextQuestionWithoutHint(),
+                "Отображается экран первого вопроса с неверным ответом и подсказкой!");
     }
 
 }

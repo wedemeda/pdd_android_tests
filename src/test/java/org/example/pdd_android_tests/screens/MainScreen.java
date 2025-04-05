@@ -1,18 +1,18 @@
 package org.example.pdd_android_tests.screens;
 
+
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import org.openqa.selenium.*;
 import org.example.pdd_android_tests.AllureLogger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.PointerInput;
+import org.openqa.selenium.interactions.Sequence;
 import org.openqa.selenium.support.PageFactory;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.Duration;
+import java.util.*;
 
 import static org.example.pdd_android_tests.MyWait.myWait;
 
@@ -75,7 +75,7 @@ public class MainScreen {
     private WebElement startExamButton;
 
     @SuppressWarnings("unused")
-    @AndroidFindBy(xpath = "//android.widget.TextView[@resource-id=\"ru.drom.pdd.android.app:id/answer_number_text\""+
+    @AndroidFindBy(xpath = "//android.widget.TextView[@resource-id=\"ru.drom.pdd.android.app:id/answer_number_text\"" +
             "and @text=\"1.\"]")
     private WebElement answer1Button;
 
@@ -117,6 +117,10 @@ public class MainScreen {
     @SuppressWarnings("unused")
     @AndroidFindBy(id = "ru.drom.pdd.android.app:id/shuffle_answers_switch")
     private WebElement shuffleToggleButton;
+
+    @SuppressWarnings("unused")
+    @AndroidFindBy(id = "ru.drom.pdd.android.app:id/mistakes_hint_switch")
+    private WebElement hintSwitchButton;
 
 
     public void intoMainScreen() {
@@ -174,7 +178,7 @@ public class MainScreen {
         LOG.info("Выбрали радио кнопку 'AB'");
         myWait(5).clickable(confirmToggleButton);
         confirmToggleButton.click();
-        LOG.info("Выбрали тогл кнопку 'Дополнительно подтверждать выбранный ответ'");
+        LOG.info("Выключили тогл кнопку 'Дополнительно подтверждать выбранный ответ'");
         myWait(10).clickable(backButton);
         backButton.click();
         LOG.info("Нажали на кнопку 'Назад'");
@@ -218,10 +222,10 @@ public class MainScreen {
 
 
     // Динамический поиск ответа по номеру вопроса
-    public String getAnswer(String questionNumber) {
+    public String getAnswer(String answerNumber) {
         WebElement answer = driver.findElement(By.xpath(
                 String.format("//*[@text='%s.']/following-sibling::*[@resource-id='ru.drom.pdd.android.app:id/answer_text']",
-                        questionNumber)
+                        answerNumber)
         ));
         return answer.getText();
     }
@@ -229,15 +233,15 @@ public class MainScreen {
 
     public Map<String, String> getAnswerMap() {
         Map<String, String> map = new HashMap<>();
-        for (WebElement question : answerTitles) {
-            String qText = question.getText();
+        for (WebElement answer : answerTitles) {
+            String qText = answer.getText();
             map.put(qText, getAnswer(qText.replace(".", "")));
         }
         return map;
     }
 
 
-    public boolean isMischungAnswers() {
+    public boolean isShuffleAnswers() {
         myWait(5).clickable(categoryButton);
         categoryButton.click();
         LOG.info("Нажали на кнопку 'Билеты'");
@@ -263,7 +267,7 @@ public class MainScreen {
         LOG.info("Нажали на значок 'шестеренки'");
         myWait(5).clickable(shuffleToggleButton);
         shuffleToggleButton.click();
-        LOG.info("Нажали тогл кнопку 'Перемешивать варианты ответов'");
+        LOG.info("Включили тогл кнопку 'Перемешивать варианты ответов'");
         myWait(5).clickable(backButton);
         backButton.click();
         LOG.info("Нажали на кнопку 'Назад'");
@@ -276,6 +280,61 @@ public class MainScreen {
         Map<String, String> answersAfterShuffle = getAnswerMap();
         LOG.infoWithScreenshot("Сохранили порядок значений ответов");
         return !answersBeforSchuffle.equals(answersAfterShuffle);
+    }
+
+    // Свайп вверх
+    public void swipeDownSimple(AndroidDriver driver) {
+        int screenHeight = driver.manage().window().getSize().getHeight();
+        int screenWidth = driver.manage().window().getSize().getWidth();
+
+        int startX = screenWidth / 2;
+        int startY = (int) (screenHeight * 0.7);
+        int endY = (int) (screenHeight * 0.3);
+
+        PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
+        Sequence swipe = new Sequence(finger, 1);
+
+        swipe.addAction(finger.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), startX, startY));
+        swipe.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
+        swipe.addAction(finger.createPointerMove(Duration.ofMillis(800), PointerInput.Origin.viewport(), startX, endY));
+        swipe.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+
+        driver.perform(Collections.singletonList(swipe));
+    }
+
+    public boolean isNextQuestionWithoutHint() {
+        myWait(5).clickable(settingsButton);
+        settingsButton.click();
+        LOG.info("Нажали на значок 'шестеренки'");
+        swipeDownSimple(driver);
+        LOG.info("Свайпнули вверх");
+        myWait(5).clickable(hintSwitchButton);
+        hintSwitchButton.click();
+        LOG.info("Выключили тогл кнопку 'Подсказка после ошибки'");
+        myWait(5).clickable(backButton);
+        backButton.click();
+        LOG.info("Нажали на кнопку 'Назад'");
+        myWait(5).clickable(categoryButton);
+        categoryButton.click();
+        LOG.info("Нажали на кнопку 'Билеты'");
+        myWait(5).clickable(abButton);
+        abButton.click();
+        LOG.info("Нажали на кнопку 'AB'");
+        myWait(5).clickable(popText);
+        popText.click();
+        LOG.info("Ткнули на всплывшее сверху окно с сообщением");
+        myWait(5).clickable(firstTicketButton);
+        firstTicketButton.click();
+        LOG.info("Выбрали первый билет");
+        myWait(5).clickable(answer1Button);
+        answer1Button.click();
+        LOG.info("Выбрали первый вариант ответа");
+        try {
+            myWait(5).visible(nextQuestionButton);
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 
     public MainScreen(AndroidDriver driver) {
